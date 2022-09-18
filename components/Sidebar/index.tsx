@@ -2,10 +2,13 @@ import React from "react";
 import NextImage from "next/image";
 import { Box, List, Divider } from "@chakra-ui/layout";
 import CustomListItem from "./CustomListItem";
-import { navItems, musicItems, playlists } from "./constants";
+import { navItems, musicItems } from "./constants";
 import PlaylistItem from "./PlaylistItem";
+import { usePlaylists } from "../../lib/hooks";
 
 const Sidebar = () => {
+  const { playlists } = usePlaylists();
+
   return (
     <Box
       width="100%"
@@ -41,8 +44,8 @@ const Sidebar = () => {
 
         <Box marginTop="20px" paddingX="20px" overflowY="auto" height="56%">
           <List spacing={2}>
-            {playlists.map((item) => (
-              <PlaylistItem key={item} name={item} />
+            {playlists?.map((item) => (
+              <PlaylistItem key={item.id} name={item.name} />
             ))}
           </List>
         </Box>
