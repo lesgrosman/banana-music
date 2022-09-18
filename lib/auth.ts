@@ -23,7 +23,7 @@ export const validateRoute = (handler) => {
         res.json("Not Authorized");
         return;
       }
-      return handler(req, res, handler);
+      return handler(req, res, user);
     }
     res.status(401);
     res.json("Not Authorized");

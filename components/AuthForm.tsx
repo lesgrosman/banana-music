@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { Box, Flex, Input, Button } from "@chakra-ui/react";
 import NextImage from "next/image";
 import { useRouter } from "next/router";
-import { useSWRConfig } from "swr";
 import { auth } from "../lib/mutations";
 
 interface Props {
@@ -13,15 +12,24 @@ const AuthForm = ({ mode }: Props) => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string>("");
   const router = useRouter();
 
   const handleSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
     setIsLoading(true);
 
-    await auth(mode, { email, password });
-    setIsLoading(false);
-    router.push("/");
+    const res = await auth(mode, { email, password });
+
+    if (res.error) {
+      setError(res.error);
+      setIsLoading(false);
+    } else {
+      setIsLoading(false);
+      router.push("/");
+      setEmail("");
+      setPassword("");
+    }
   };
 
   return (
@@ -42,12 +50,14 @@ const AuthForm = ({ mode }: Props) => {
               type="email"
               onChange={(e) => setEmail(e.target.value)}
               marginBottom="20px"
+              value={email}
             />
             <Input
               placeholder="Password"
               type="password"
               onChange={(e) => setPassword(e.target.value)}
               marginBottom="20px"
+              value={password}
             />
             <Flex justify="end">
               <Button
@@ -63,6 +73,11 @@ const AuthForm = ({ mode }: Props) => {
                 {mode}
               </Button>
             </Flex>
+            {error && (
+              <Flex justify="end" color="red.400" marginTop="20px">
+                {error}
+              </Flex>
+            )}
           </form>
         </Box>
       </Flex>
