@@ -53,7 +53,7 @@ const Sidebar = () => {
         <Box marginTop="20px" paddingX="20px" overflowY="auto" height="56%">
           <List spacing={2}>
             {playlists?.map((item) => (
-              <PlaylistItem key={item.id} name={item.name} />
+              <PlaylistItem key={item.id} playlist={item} />
             ))}
           </List>
         </Box>
