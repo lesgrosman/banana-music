@@ -7,7 +7,15 @@ import PlaylistItem from "./PlaylistItem";
 import { usePlaylists } from "../../lib/hooks";
 
 const Sidebar = () => {
-  const { playlists } = usePlaylists();
+  const { playlists, loading, error } = usePlaylists();
+
+  if (loading && !playlists) {
+    return <>Loading...</>;
+  }
+
+  if (error || !playlists) {
+    return <>Error</>;
+  }
 
   return (
     <Box
